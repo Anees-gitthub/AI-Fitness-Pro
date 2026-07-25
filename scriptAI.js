@@ -90,7 +90,7 @@ async function sendMessage() {
 
   // 3. FETCH FROM BACKEND SERVER
   try {
-    const response = await fetch("http://localhost:5000/chat", {
+    const response = await fetch("https://ai-fitness-pro-24vl.onrender.com", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

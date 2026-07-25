@@ -55,7 +55,7 @@ async function sendMessage() {
 
     // YOUR AI API CALL HERE
 
-    const response = await fetch("http://localhost:5000/chat", {
+    const response = await fetch("https://ai-fitness-pro-24vl.onrender.com", {
 
       method:"POST",
 
