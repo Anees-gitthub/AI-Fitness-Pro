@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Profile - AI Fitness Pro</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI;
+  background: radial-gradient(circle at top,#1a1a1a,#000);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.card{
+  width:380px;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(15px);
+  box-shadow:0 0 30px rgba(0,0,0,0.6);
+  text-align:center;
+}
+
+h1{
+  color:#00eaff;
+  margin-bottom:20px;
+}
+
+.info{
+  text-align:left;
+  line-height:2;
+  font-size:16px;
+}
+
+button{
+  margin-top:20px;
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(45deg,#00eaff,#0077ff);
+  color:white;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>👤 Your Profile</h1>
+  <div class="info" id="info">Loading...</div>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<script>
+const userId = new URLSearchParams(window.location.search).get("id");
+
+fetch(`http://localhost:2000/api/user/profile/${userId}`)
+.then(res => res.json())
+.then(data => {
+  document.getElementById("info").innerHTML = `
+    <p><b>Name:</b> ${data.name}</p>
+    <p><b>Email:</b> ${data.email}</p>
+    <p><b>Phone:</b> ${data.phone}</p>
+    <p><b>Role:</b> ${data.role}</p>
+  `;
+});
+
+function goBack(){
+  window.location.href = "dashboard1.html";
+}
+if (!userId || userId === "null" || userId === "undefined") {
+  alert("User not logged in");
+  return;
+}
+</script>
+
+</body>
+</html>

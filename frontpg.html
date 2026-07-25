@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ AI Fitness Pro</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:#05070d;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* NAVBAR */
+nav{
+    position:fixed;
+    width:100%;
+    top:0;
+    left:0;
+    padding:20px 60px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:100;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
+    backdrop-filter: blur(10px);
+}
+
+.logo{
+    font-weight:800;
+    font-size:22px;
+}
+
+/* HERO */
+.hero{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    position:relative;
+    background:url('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1974') center/cover no-repeat;
+}
+
+.overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:900px;
+    padding:0 20px;
+}
+
+/* ANIMATED AI H1 */
+.hero h1{
+    font-size:64px;
+    font-weight:900;
+    line-height:1.1;
+    background: linear-gradient(90deg,#00c6ff,#7b2ff7,#00ffcc,#00c6ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation: gradientMove 6s infinite linear;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0%}
+    100%{background-position:300%}
+}
+
+.hero p{
+    margin-top:20px;
+    font-size:18px;
+    color:#ccc;
+    max-width:700px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+/* BUTTONS */
+.white-btn, .blue-btn{
+    margin-top:30px;
+    padding:14px 28px;
+    border-radius:30px;
+    border:1px solid rgba(255,255,255,0.4);
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    background:transparent;
+    color:white;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+    transform:translateY(0px);
+    will-change: transform;
+}
+
+/* blue button */
+.blue-btn{
+    background:linear-gradient(90deg,#00c6ff,#0072ff);
+    border:none;
+}
+
+/* hover lift */
+.white-btn:hover, .blue-btn:hover{
+    transform:translateY(-6px) scale(1.03);
+    box-shadow:0 15px 40px rgba(0,198,255,0.25);
+}
+
+/* glow follow */
+.white-btn::before, .blue-btn::before{
+    content:"";
+    position:absolute;
+    width:200px;
+    height:200px;
+    background:radial-gradient(circle, rgba(0,255,255,0.35), transparent 60%);
+    top:var(--y,50%);
+    left:var(--x,50%);
+    transform:translate(-50%,-50%);
+    opacity:0;
+    transition:0.2s;
+}
+
+.white-btn:hover::before,
+.blue-btn:hover::before{
+    opacity:1;
+}
+
+/* SECTION */
+.section{
+    padding:120px 10%;
+}
+
+/* SCROLL REVEAL */
+.fade{
+    opacity:0;
+    transform:translateY(60px);
+    transition:all 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* HEADINGS */
+.section h2{
+    font-size:52px;
+    font-weight:900;
+    margin-bottom:20px;
+    line-height:1.2;
+}
+
+.section p{
+    color:#bbb;
+    max-width:700px;
+    line-height:1.6;
+}
+
+/* CARDS */
+.cards{
+    display:flex;
+    gap:40px;
+    margin-top:40px;
+    flex-wrap:wrap;
+}
+
+.card{
+    flex:1;
+    min-width:260px;
+    background:#0b0f1a;
+    padding:20px;
+    border-radius:20px;
+    transition:0.3s;
+    box-shadow:0 0 20px rgba(0,150,255,0.15);
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 0 40px rgba(0,200,255,0.4);
+}
+
+/* CHALLENGE */
+.challenge{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:40px;
+    flex-wrap:wrap;
+}
+
+.challenge img{
+    width:300px;
+    border-radius:15px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">⚡ AI Fitness Pro</div>
+</nav>
+
+<section class="hero">
+    <div class="overlay"></div>
+
+    <div class="hero-content fade">
+        <h1>BUILD MUSCLE.<br>BURN FAT. NO GUESSING.</h1>
+
+        <p>
+            AI Fitness Pro adapts your training in real time based on your performance and recovery.
+        </p>
+
+        <button class="white-btn" onclick="window.location.href='login.html'">
+            See How It Works
+        </button>
+    </div>
+</section>
+
+<section class="section fade">
+    <h2>PROGRESS SHOULD BE PREDICTABLE</h2>
+
+    <p>
+        AI continuously adjusts your training load so you never plateau.
+    </p>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Smart Workouts</h3>
+            <p>AI builds progressive overload plans automatically.</p>
+        </div>
+
+        <div class="card">
+            <h3>Adaptive Training</h3>
+            <p>Adjusts based on fatigue and performance.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section challenge fade">
+    <div>
+        <h2>STRUCTURED CHALLENGES.<br>REAL STAKES.</h2>
+
+        <p>
+            Compete in AI-driven fitness challenges designed for measurable growth.
+        </p>
+
+        <button class="blue-btn" onclick="window.location.href='login.html'">
+            Join the Challenge
+        </button>
+    </div>
+
+    <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=800">
+</section>
+
+<script>
+
+/* scroll reveal */
+const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            entry.target.classList.add('show');
+        }
+    });
+});
+
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
+
+/* button 3D + glow follow */
+document.querySelectorAll("button").forEach(btn=>{
+    btn.addEventListener("mousemove",(e)=>{
+        const rect = btn.getBoundingClientRect();
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        btn.style.setProperty("--x", x + "px");
+        btn.style.setProperty("--y", y + "px");
+
+        const centerX = rect.width/2;
+        const centerY = rect.height/2;
+
+        const rotateX = ((y-centerY)/centerY) * -8;
+        const rotateY = ((x-centerX)/centerX) * 8;
+
+        btn.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+    });
+
+    btn.addEventListener("mouseleave",()=>{
+        btn.style.transform = "translateY(0px) rotateX(0deg) rotateY(0deg) scale(1)";
+    });
+});
+
+</script>
+
+</body>
+</html>

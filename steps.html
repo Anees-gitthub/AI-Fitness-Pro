@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Step Tracker</title>
+<style>
+body{background:#000;color:white;text-align:center;padding:40px;font-family:sans-serif}
+button{padding:10px 20px;margin:10px;border:none;border-radius:8px;background:#7f00ff;color:white}
+.back-btn{
+  position:fixed;
+  top:20px;
+  left:20px;
+  padding:8px 14px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  cursor:pointer;
+  font-size:14px;
+  transition:0.3s;
+  z-index:1000;
+}
+
+.back-btn:hover{
+  background:linear-gradient(45deg,#ff4d4d,#ff9900);
+}
+</style>
+</head>
+<body>
+    <div class="back-btn" onclick="goBack()">← Back</div>
+
+<h1>🚶 Step Tracker</h1>
+
+<h2 id="steps">0</h2>
+
+<button onclick="add()">+500 Steps</button> <button onclick="reset()">Reset</button>
+
+<script>
+let steps = localStorage.getItem("steps") || 0;
+steps = parseInt(steps);
+
+function update(){
+  document.getElementById("steps").innerText = steps;
+}
+update();
+
+function add(){
+  steps += 500;
+  localStorage.setItem("steps", steps);
+  update();
+}
+
+function reset(){
+  steps = 0;
+  localStorage.setItem("steps", steps);
+  update();
+}
+function goBack(){
+  window.location.href = "dashboard1.html"; // your dashboard page
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Blog - AI Fitness Pro</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+  background: radial-gradient(circle at top,#1a1a1a,#000);
+  color:white;
+  padding:40px;
+}
+
+.back{
+  margin-bottom:20px;
+  cursor:pointer;
+  color:#ff9900;
+}
+
+.container{
+  max-width:800px;
+  margin:auto;
+}
+
+img{
+  width:100%;
+  border-radius:15px;
+  margin-bottom:20px;
+}
+
+h1{font-size:32px;margin-bottom:10px;}
+.meta{color:#aaa;margin-bottom:20px;}
+.content{line-height:1.7;color:#ddd;}
+</style>
+</head>
+
+<body>
+
+<div class="back" onclick="goBack()">← Back</div>
+
+<div class="container">
+  <img id="img">
+  <h1 id="title"></h1>
+  <p class="meta" id="meta"></p>
+  <p class="content" id="content"></p>
+</div>
+
+<script>
+
+const blogs = [
+
+{
+title:"Why Most People Quit the Gym After 6 Weeks",
+meta:"May 1, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1554284126-aa88f22d8b74",
+content:`Most people quit not because they lack discipline, but because they rely too much on motivation.
+
+In the first few weeks, everything feels exciting. But by week 5–6, progress slows and workouts feel repetitive. That’s where most people give up.
+
+The key is building systems instead of chasing motivation.
+
+Focus on:
+• showing up consistently  
+• tracking small improvements  
+• avoiding burnout  
+
+Fitness success is built through habits, not hype.`
+},
+
+{
+title:"How Much Protein Do Lifters Really Need?",
+meta:"Apr 28, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1599058917212-d750089bc07e",
+content:`Protein plays a crucial role in muscle repair and growth.
+
+Most research shows the optimal intake is between 1.6–2.2g per kg of bodyweight.
+
+Going beyond that won’t speed up results.
+
+Best approach:
+• distribute protein across meals  
+• include lean meats, eggs, dairy, legumes  
+• stay consistent daily  
+
+Supplements are optional — food comes first.`
+},
+
+{
+title:"Beginner Strength Blueprint",
+meta:"Apr 24, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1583454110551-21f2fa2afe61",
+content:`Beginners often overcomplicate training.
+
+Start simple:
+• Squats  
+• Deadlifts  
+• Bench Press  
+• Rows  
+
+Train 3–4 times per week and focus on proper form.
+
+Progress slowly by increasing weight or reps.
+
+Consistency beats fancy workouts.`
+},
+
+{
+title:"Strength vs Endurance",
+meta:"Apr 21, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1517836357463-d25dfeac3438",
+content:`Strength training builds power, while endurance training improves stamina.
+
+Neither is better — they serve different purposes.
+
+If your goal is muscle:
+focus more on strength training.
+
+If your goal is stamina:
+include cardio sessions.
+
+The best approach is combining both in a balanced routine.`
+},
+
+{
+title:"Mind-Muscle Connection",
+meta:"Apr 17, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
+content:`The mind-muscle connection refers to consciously focusing on a muscle during exercise.
+
+It can improve muscle activation, especially for isolation movements.
+
+However, it doesn’t replace progressive overload.
+
+Use it as a tool, not a rule:
+• slow down reps  
+• focus on contraction  
+• combine with proper technique  
+
+It helps, but it’s not magic.`
+},
+
+{
+title:"Body Confidence & Strength",
+meta:"Apr 14, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1549060279-7e168fcee0c2",
+content:`Strength training doesn’t just change your body — it changes your mindset.
+
+As you get stronger:
+• confidence improves  
+• discipline builds  
+• self-image becomes more positive  
+
+Focus on performance, not just appearance.
+
+Confidence comes from progress, not perfection.`
+},
+
+{
+title:"Cardio Kills Muscle?",
+meta:"Apr 10, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1518611012118-fc8f2f1f2d7c",
+content:`Cardio does NOT kill muscle when done correctly.
+
+Problems arise when:
+• calories are too low  
+• recovery is poor  
+• cardio volume is excessive  
+
+Balance is key:
+• combine strength + moderate cardio  
+• eat enough protein  
+• prioritize recovery  
+
+You can build muscle and do cardio together.`
+},
+
+{
+title:"Machines vs Free Weights",
+meta:"Apr 7, 2026 • Alyssa Gonzalez",
+img:"https://images.unsplash.com/photo-1558611848-73f7eb4001a1",
+content:`Both machines and free weights have benefits.
+
+Free weights:
+• improve stability  
+• engage more muscles  
+
+Machines:
+• isolate muscles  
+• reduce injury risk  
+
+Best strategy:
+use both depending on your goal and experience level.`
+}
+
+];
+
+const index = localStorage.getItem("selectedBlog") || 0;
+const blog = blogs[index];
+
+document.getElementById("title").innerText = blog.title;
+document.getElementById("meta").innerText = blog.meta;
+document.getElementById("content").innerText = blog.content;
+document.getElementById("img").src = blog.img;
+
+function goBack(){
+  window.history.back();
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Diet Plan</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  background: radial-gradient(circle at top,#1a1a1a,#000);
+  color:white;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* HEADER */
+.title{
+  text-align:center;
+  padding:10px;
+}
+
+.nav{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:8px 14px;
+  border:none;
+  border-radius:20px;
+  background:#222;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn:hover{
+  background:linear-gradient(45deg,#00c6ff,#0072ff);
+}
+
+/* SCROLL */
+.scroll{
+  height:calc(100vh - 140px);
+  overflow-y:auto;
+  padding:10px;
+}
+
+/* GRID */
+.container{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+/* CARD */
+.card{
+  aspect-ratio:1/1;
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+}
+
+.card img{
+  position:absolute;
+  width:90%;
+  height:90%;
+  top:5%;
+  left:5%;
+  object-fit:cover;
+  border-radius:15px;
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);
+}
+
+.card h3{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  z-index:2;
+  font-size:13px;
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  width:90%;
+  max-width:420px;
+  background:#111;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.modal img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.modal-text{
+  padding:15px;
+  color:#ccc;
+  font-size:14px;
+}
+
+.close{
+  position:absolute;
+  top:20px;
+  right:20px;
+  font-size:20px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+<h2>🥗 AI Diet Planner</h2>
+</div>
+
+<div class="nav">
+<button class="btn" onclick="load('weightGain')">Weight Gain</button>
+<button class="btn" onclick="load('weightLoss')">Weight Loss</button>
+<button class="btn" onclick="load('highProtein')">High Protein</button>
+<button class="btn" onclick="load('highCalories')">High Calories</button>
+<button class="btn" onclick="load('highCarbs')">High Carbs</button>
+<button class="btn" onclick="load('fiber')">Fiber Rich</button>
+<button class="btn" onclick="goBack()">Back</button>
+</div>
+
+<div class="scroll">
+<div class="container" id="dietContainer"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="closeModal(event)">
+<div class="modal-content" onclick="event.stopPropagation()">
+<img id="modalImg">
+<div class="modal-text">
+<h3 id="modalTitle"></h3>
+<p id="modalDesc"></p>
+</div>
+</div>
+<div class="close" onclick="closeModal()">❌</div>
+</div>
+
+<script>
+
+const data = {
+
+weightGain:[
+{t:"Peanut Banana Shake",i:"https://images.pexels.com/photos/5938/food-salad-healthy-lunch.jpg",d:"High calorie shake for mass gain."},
+{t:"Rice & Chicken",i:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg",d:"Protein + carbs for bulking."},
+{t:"Egg Sandwich",i:"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",d:"Energy dense breakfast."},
+{t:"Nut Smoothie",i:"https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg",d:"Healthy fats for weight gain."},
+{t:"Avocado Toast",i:"https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg",d:"Calorie rich healthy fats."},
+{t:"Cheese Pasta",i:"https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg",d:"High calorie comfort food."}
+],
+
+weightLoss:[
+{t:"Salad Bowl",i:"https://images.pexels.com/photos/5938/food-salad-healthy-lunch.jpg",d:"Low calorie fat loss meal."},
+{t:"Boiled Eggs",i:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg",d:"High protein low fat."},
+{t:"Green Smoothie",i:"https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg",d:"Detox drink for fat burn."},
+{t:"Grilled Chicken",i:"https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg",d:"Lean protein for diet."},
+{t:"Veg Soup",i:"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",d:"Low calorie filling meal."},
+{t:"Fruit Bowl",i:"https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg",d:"Natural sugar energy."}
+],
+
+highProtein:[
+{t:"Chicken Breast",i:"https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg",d:"Lean protein source."},
+{t:"Egg Omelette",i:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg",d:"Protein rich breakfast."},
+{t:"Paneer Bowl",i:"https://images.pexels.com/photos/7625056/pexels-photo-7625056.jpeg",d:"Vegetarian protein."},
+{t:"Protein Shake",i:"https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg",d:"Fast muscle recovery."},
+{t:"Fish Grill",i:"https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg",d:"Omega + protein."},
+{t:"Greek Yogurt",i:"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",d:"Gut friendly protein."}
+],
+
+highCalories:[
+{t:"Burger Combo",i:"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",d:"High calorie fast food."},
+{t:"Cheese Pizza",i:"https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg",d:"Energy dense meal."},
+{t:"Pasta Cream",i:"https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg",d:"High carb + fat."},
+{t:"Fried Rice",i:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg",d:"Calorie heavy dish."},
+{t:"Milk Shake",i:"https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg",d:"Liquid calories."},
+{t:"Butter Toast",i:"https://images.pexels.com/photos/1600711/pexels-photo-1600711.jpeg",d:"Simple high calorie snack."}
+],
+<!-- FIXED ONLY THE ERROR INSIDE highCarbs ARRAY -->
+
+highCarbs:[
+{t:"Rice Bowl",i:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg",d:"Main carb source."},
+
+{t:"Pasta",i:"https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg",d:"Energy fuel meal."},
+
+{t:"Bread Toast",i:"https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop",d:"Quick carb-rich breakfast."},
+
+{t:"Banana Bowl",i:"https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg",d:"Natural carbs."},
+
+{t:"Oats",i:"https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg",d:"Slow release energy."},
+
+{t:"Potato Meal",i:"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",d:"Starchy carbs."}
+],
+
+fiber:[
+{t:"Oats Bowl",i:"https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg",d:"High fiber breakfast."},
+{t:"Apple Salad",i:"https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg"},
+{t:"Vegetable Soup",i:"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",d:"Gut health support."},
+{t:"Chia Pudding",i:"https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg",d:"Fiber + omega 3."},
+{t:"Beans Bowl",i:"https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg",d:"Protein + fiber."},
+{t:"Fruit Mix",i:"https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg",d:"Natural fiber source."}
+]
+
+};
+
+function load(type){
+  render(data[type]);
+}
+
+function render(list){
+  const c=document.getElementById("dietContainer");
+  c.innerHTML="";
+  list.forEach(d=>{
+    c.innerHTML+=`
+    <div class="card" onclick="openModal('${d.t}','${d.i}',\`${d.d}\`)">
+      <img src="${d.i}">
+      <h3>${d.t}</h3>
+    </div>`;
+  });
+}
+
+/* ✅ ONLY UPGRADED FUNCTION (MODAL ENHANCEMENT) */
+function openModal(t,i,d){
+
+  let extra = `
+  <br><br>
+  <b>🍽 AI Insight:</b> ${getInsight(t)}
+  <br><br>
+  <b>⚡ Benefit:</b> ${getBenefit(t)}
+  <br><br>
+  <b>⏰ Best Time:</b> ${getTime(t)}
+  `;
+
+  document.getElementById("modal").style.display="flex";
+  document.getElementById("modalTitle").innerText=t;
+  document.getElementById("modalImg").src=i;
+  document.getElementById("modalDesc").innerHTML=d + extra;
+}
+
+/* AI HELPERS */
+function getInsight(t){
+  if(t.toLowerCase().includes("protein")) return "Builds muscle and repairs tissues.";
+  if(t.toLowerCase().includes("loss")) return "Supports fat burning and calorie control.";
+  if(t.toLowerCase().includes("gain")) return "Helps increase body mass effectively.";
+  if(t.toLowerCase().includes("fiber")) return "Improves digestion and gut health.";
+  return "Balanced nutrition for daily fitness.";
+}
+
+function getBenefit(t){
+  if(t.toLowerCase().includes("protein")) return "Strength + muscle recovery.";
+  if(t.toLowerCase().includes("loss")) return "Fat reduction support.";
+  if(t.toLowerCase().includes("gain")) return "Healthy weight gain.";
+  return "Overall health improvement.";
+}
+
+function getTime(t){
+  if(t.toLowerCase().includes("breakfast")) return "Morning (7–10 AM)";
+  if(t.toLowerCase().includes("lunch")) return "Afternoon (12–3 PM)";
+  if(t.toLowerCase().includes("dinner")) return "Evening (7–9 PM)";
+  return "Anytime based on diet plan";
+}
+
+function closeModal(e){
+  if(!e || e.target.id==="modal"){
+    document.getElementById("modal").style.display="none";
+  }
+}
+
+function goBack(){
+  window.location.href="dashboard1.html";
+}
+
+load("weightGain");
+
+</script>
+
+</body>
+</html>

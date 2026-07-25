@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Smart Calories Calculator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:
+  linear-gradient(rgba(0,0,0,.78),rgba(0,0,0,.82)),
+  url('photo3.jpg') no-repeat center/cover;
+  color:white;
+  padding:40px 20px;
+}
+
+/* TOP BUTTONS */
+.top-buttons{
+  position:fixed;
+  top:20px;
+  left:20px;
+  display:flex;
+  gap:12px;
+  z-index:1000;
+}
+
+.top-btn{
+  padding:10px 16px;
+  border:none;
+  border-radius:30px;
+  background:rgba(255,255,255,0.08);
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.top-btn:hover{
+  background:linear-gradient(45deg,#00eaff,#0077ff);
+}
+
+/* CONTAINER */
+.container{
+  max-width:950px;
+  margin:auto;
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(18px);
+  border-radius:30px;
+  padding:40px;
+}
+
+/* TITLE */
+.title{
+  text-align:center;
+  font-size:40px;
+  font-weight:900;
+  background:linear-gradient(90deg,#00eaff,#0077ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+  text-align:center;
+  color:#ccc;
+  margin-bottom:30px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;
+}
+
+.input-box label{
+  display:block;
+  margin-bottom:8px;
+  color:#ddd;
+}
+
+input, select{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:rgba(0,0,0,0.4);
+  color:white;
+}
+
+/* FIXED CHECKBOX LAYOUT */
+.section{
+  margin-top:30px;
+}
+
+.section h2{
+  color:#00eaff;
+  margin-bottom:15px;
+}
+
+.checkbox-grid{
+   display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:14px;
+  align-items:stretch;
+}
+
+.checkbox-card{
+ 
+ display:flex;
+  align-items:center;
+  gap:12px;
+
+  background:rgba(255,255,255,0.06);
+  padding:14px 16px;
+  border-radius:16px;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  font-size:14px;
+  font-weight:500;
+  color:#eaeaea;
+
+  transition:0.25s ease;
+  cursor:pointer;
+}
+
+/* BUTTON */
+.calc-btn{
+  width:100%;
+  margin-top:25px;
+  padding:16px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(45deg,#00eaff,#0077ff);
+  color:white;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* LOADING */
+.loading{
+  display:none;
+  margin-top:20px;
+  text-align:center;
+  font-size:16px;
+  color:#00eaff;
+}
+
+/* RESULT */
+.result{
+  margin-top:20px;
+  display:none;
+  background:rgba(255,255,255,0.06);
+  padding:20px;
+  border-radius:18px;
+}
+.checkbox-card input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  accent-color:#00eaff;
+  cursor:pointer;
+}
+
+/* TEXT ALIGNMENT FIX */
+.checkbox-card label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- BUTTONS -->
+<div class="top-buttons">
+<button class="top-btn" onclick="goBack()">← Dashboard</button>
+<button class="top-btn" onclick="refreshPage()">⟳ Refresh</button>
+</div>
+
+<div class="container">
+
+<div class="title">🔥 Smart Calories AI</div>
+<div class="subtitle">AI-based health & nutrition system</div>
+
+<!-- INPUTS -->
+<div class="grid">
+
+<div class="input-box">
+<label>Age</label>
+<input type="number" id="age" min="1" oninput="this.value=this.value.replace(/-/g,'')">
+</div>
+
+<div class="input-box">
+<label>Gender</label>
+<select id="gender">
+<option>Male</option>
+<option>Female</option>
+</select>
+</div>
+
+<div class="input-box">
+<label>Height</label>
+<input type="number" id="height" min="1" oninput="this.value=this.value.replace(/-/g,'')">
+</div>
+
+<div class="input-box">
+<label>Weight</label>
+<input type="number" id="weight" min="1" oninput="this.value=this.value.replace(/-/g,'')">
+</div>
+
+<div class="input-box">
+<label>Activity</label>
+<select id="activity">
+<option value="1.2">Low</option>
+<option value="1.4">Medium</option>
+<option value="1.7">High</option>
+</select>
+</div>
+
+<div class="input-box">
+<label>Goal</label>
+<select id="goal">
+<option value="maintain">Maintain</option>
+<option value="loss">Lose</option>
+<option value="gain">Gain</option>
+</select>
+</div>
+
+</div>
+
+<!-- ALLERGIES -->
+<div class="section">
+<h2>Food Allergies</h2>
+
+<div class="checkbox-grid">
+
+<div class="checkbox-card"><input type="checkbox" id="nuts"> Nuts</div>
+<div class="checkbox-card"><input type="checkbox" id="milk"> Dairy</div>
+<div class="checkbox-card"><input type="checkbox" id="gluten"> Gluten</div>
+<div class="checkbox-card"><input type="checkbox" id="seafood"> Seafood</div>
+<div class="checkbox-card"><input type="checkbox" id="eggs"> Eggs</div>
+<div class="checkbox-card"><input type="checkbox" id="soy"> Soy</div>
+<div class="checkbox-card"><input type="checkbox" id="sesame"> Sesame</div>
+<div class="checkbox-card"><input type="checkbox" id="peanuts"> Peanuts</div>
+
+</div>
+</div>
+
+<!-- MEDICAL -->
+<div class="section">
+<h2>Medical Conditions</h2>
+
+<div class="checkbox-grid">
+
+<div class="checkbox-card"><input type="checkbox" id="diabetes"> Diabetes</div>
+<div class="checkbox-card"><input type="checkbox" id="bp"> BP-low</div>
+<div class="checkbox-card"><input type="checkbox" id="thyroid"> Thyroid</div>
+<div class="checkbox-card"><input type="checkbox" id="heart"> BP-high</div>
+<div class="checkbox-card"><input type="checkbox" id="asthma"> Asthma</div>
+<div class="checkbox-card"><input type="checkbox" id="kidney"> Kidney</div>
+<div class="checkbox-card"><input type="checkbox" id="liver"> Liver</div>
+<div class="checkbox-card"><input type="checkbox" id="anemia"> Anemia</div>
+<div class="checkbox-card"><input type="checkbox" id="arthritis"> Arthritis</div>
+<div class="checkbox-card"><input type="checkbox" id="cholesterol"> Cholesterol</div>
+<div class="checkbox-card"><input type="checkbox" id="migraine"> Migraine</div>
+<div class="checkbox-card"><input type="checkbox" id="gastric"> Gastric</div>
+<div class="checkbox-card"><input type="checkbox" id="infection"> Infection</div>
+<div class="checkbox-card"><input type="checkbox" id="backpain"> Back Pain</div>
+
+</div>
+</div>
+
+<button class="calc-btn" onclick="calculateCalories()">Calculate Calories</button>
+
+<!-- LOADING TEXT -->
+<div class="loading" id="loading">🤖 AI is analyzing your body... please wait</div>
+
+<!-- RESULT -->
+<div class="result" id="resultBox">
+<h2>Result</h2>
+<p id="calorieText"></p>
+<p id="dietText"></p>
+<p id="warningText"></p>
+</div>
+
+</div>
+
+<script>
+
+function calculateCalories(){
+
+document.getElementById("loading").style.display="block";
+document.getElementById("resultBox").style.display="none";
+
+setTimeout(()=>{
+
+let age=document.getElementById("age").value;
+let height=document.getElementById("height").value;
+let weight=document.getElementById("weight").value;
+let gender=document.getElementById("gender").value;
+let activity=parseFloat(document.getElementById("activity").value);
+let goal=document.getElementById("goal").value;
+
+let bmr=(gender==="Male")
+?10*weight+6.25*height-5*age+5
+:10*weight+6.25*height-5*age-161;
+
+let calories=bmr*activity;
+
+if(goal==="loss") calories-=400;
+if(goal==="gain") calories+=350;
+
+let warning="";
+
+if(document.getElementById("diabetes").checked) warning+="Sugar control<br>";
+if(document.getElementById("heart").checked) warning+="Low fat<br>";
+if(document.getElementById("bp").checked) warning+="Low salt<br>";
+
+let avoid=[];
+["nuts","milk","gluten","seafood","eggs","soy","sesame","peanuts"]
+.forEach(id=>{
+if(document.getElementById(id).checked) avoid.push(id);
+});
+
+document.getElementById("loading").style.display="none";
+document.getElementById("resultBox").style.display="block";
+
+document.getElementById("calorieText").innerHTML=
+"🔥 Calories: <b>"+calories.toFixed(0)+" kcal</b>";
+
+document.getElementById("dietText").innerHTML=
+"🥗 Avoid: "+(avoid.length?avoid.join(", "):"None");
+
+document.getElementById("warningText").innerHTML=
+warning||"✅ No warnings";
+
+},1200);
+
+}
+
+function goBack(){
+window.location.href="dashboard1.html";
+}
+
+function refreshPage(){
+location.reload();
+}
+
+</script>
+
+</body>
+</html>

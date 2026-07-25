@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Workout Timer</title>
+<style>
+body{background:#000;color:white;text-align:center;padding:40px;font-family:sans-serif}
+button{padding:10px;margin:10px;border:none;border-radius:8px}
+.start{background:#00c853}
+.stop{background:#ff1744}
+.reset{background:#555}
+.back-btn{
+  position:fixed;
+  top:20px;
+  left:20px;
+  padding:8px 14px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  cursor:pointer;
+  font-size:14px;
+  transition:0.3s;
+  z-index:1000;
+}
+
+.back-btn:hover{
+  background:linear-gradient(45deg,#ff4d4d,#ff9900);
+}
+</style>
+</head>
+<body>
+<div class="back-btn" onclick="goBack()">← Back</div>
+<h1>⏱ Timer</h1>
+
+<h2 id="time">0 sec</h2>
+
+<button class="start" onclick="start()">Start</button> <button class="stop" onclick="stop()">Stop</button> <button class="reset" onclick="reset()">Reset</button>
+
+<script>
+let time = 0;
+let interval = null;
+
+function update(){
+  document.getElementById("time").innerText = time + " sec";
+}
+
+function start(){
+  if(interval) return;
+  interval = setInterval(()=>{
+    time++;
+    update();
+  },1000);
+}
+
+function stop(){
+  clearInterval(interval);
+  interval = null;
+}
+
+function reset(){
+  stop();
+  time = 0;
+  update();
+}
+function goBack(){
+  window.location.href = "dashboard1.html"; // your dashboard page
+}
+</script>
+
+</body>
+</html>

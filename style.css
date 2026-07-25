@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ===== VIDEO BACKGROUND ===== */
+#bgVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  filter: brightness(0.5) contrast(1.1);
+}
+
+/* OVERLAY */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: -1;
+}
+
+/* BODY */
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 20px;
+  color: white;
+}
+
+h1 {
+  font-size: 29px;
+  margin-bottom: 10px;
+}
+
+/* CONTAINER */
+.container {
+  width: 580px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 25px 80px rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.1);
+  max-width: 600px;
+  padding: 20px;
+}
+
+/* TITLE */
+h1 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* HERO */
+.hero {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.hero img {
+  width: 110px;
+  border-radius: 12px;
+}
+
+/* CHAT */
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.4);
+  margin-bottom: 10px;
+}
+
+.bot-msg, .user-msg {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  max-width: 75%;
+  padding: 10px 14px;
+  margin: 8px 0;
+  max-width: 75%;
+
+  border-radius: 18px;
+}
+.bot-msg {
+  background: #00c853;
+}
+.chat-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-msg {
+  background: #2196f3;
+  margin-left: auto;
+}
+
+/* INPUT */
+.input-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+/* BUTTON */
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #ff3d00;
+  color: white;
+  cursor: pointer;
+}
+
+/* CARD */
+.card {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.4);
+}
+
+#time {
+  font-size: 22px;
+  margin: 10px 0;
+}

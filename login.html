@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - AI Fitness Pro</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  height:100vh;
+  background:url('photo1.jpg') no-repeat center/cover;
+  color:white;
+  overflow:hidden;
+  animation:fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+.overlay{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.75);
+}
+
+.glow-dot{
+  position:fixed;
+  width:200px;
+  height:200px;
+  background:radial-gradient(circle, rgba(0,234,255,0.25), transparent);
+  border-radius:50%;
+  filter:blur(40px);
+  z-index:0;
+  animation:moveDot 12s linear infinite alternate;
+}
+
+@keyframes moveDot{
+  0%{ top:20%; left:20%; }
+  50%{ top:60%; left:70%; }
+  100%{ top:30%; left:40%; }
+}
+
+.navbar{
+  height:10vh;
+  display:flex;
+  align-items:center;
+  padding:0 40px;
+  font-size:20px;
+  font-weight:600;
+  color:#00eaff;
+  position:relative;
+  z-index:2;
+}
+
+.container{
+  height:90vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  z-index:2;
+}
+
+.login-box{
+  width:360px;
+  padding:35px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(14px);
+  text-align:center;
+}
+
+.login-box h2{margin-bottom:5px;}
+
+.tagline{
+  font-size:13px;
+  opacity:0.7;
+  margin-bottom:20px;
+}
+
+.toggle{
+  display:flex;
+  margin-bottom:15px;
+}
+
+.toggle button{
+  flex:1;
+  padding:8px;
+  border:none;
+  background:transparent;
+  color:white;
+  cursor:pointer;
+}
+
+.toggle button.active{
+  border-bottom:2px solid #00eaff;
+  color:#00eaff;
+}
+
+.input-box{margin-bottom:12px;}
+
+.input-box input,
+.input-box select{
+  width:100%;
+  padding:11px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  background:rgba(255,255,255,0.1);
+  color:white;
+}
+
+.input-box select option {
+  background-color: #0b0f17;
+  color: white;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.otp-send-btn {
+  background: rgba(0, 234, 255, 0.2);
+  border: 1px solid #00eaff;
+  color: #00eaff;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+}
+
+.otp-send-btn:hover {
+  background: #00eaff;
+  color: #000;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.login-btn, .modal-btn{
+  width:100%;
+  padding:12px;
+  border-radius:25px;
+  border:none;
+  background:linear-gradient(45deg,#00eaff,#0077ff);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition: transform 0.15s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 234, 255, 0.3);
+  transform-style: preserve-3d;
+}
+
+.login-btn:hover, .modal-btn:hover{
+  box-shadow: 0 6px 25px rgba(0, 234, 255, 0.6);
+}
+
+.signup-link{
+  margin-top:15px;
+  font-size:14px;
+}
+
+.signup-link a{
+  color:#00eaff;
+  text-decoration:none;
+}
+
+.forgot-password{
+  margin-top:14px;
+  text-align:right;
+}
+
+.forgot-password a{
+  color:#00eaff;
+  text-decoration:none;
+}
+
+/* CUSTOM NOTIFICATION TOAST */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  color: white;
+  padding: 14px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transform: translateX(120%);
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toast.show {
+  transform: translateX(0);
+}
+
+.toast.success { border-left: 4px solid #00eaff; }
+.toast.error { border-left: 4px solid #ff4d4d; }
+
+/* FORGOT PASSWORD MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  padding: 30px;
+  border-radius: 20px;
+  width: 340px;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px; right: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.close-modal:hover { color: #fff; }
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+<div class="glow-dot"></div>
+
+<!-- TOAST -->
+<div class="toast-container">
+  <div id="toast" class="toast">
+    <span id="toastIcon">✨</span>
+    <span id="toastMsg">Notification message</span>
+  </div>
+</div>
+
+<header class="navbar">⚡ AI Fitness Pro</header>
+
+<div class="container">
+<div class="login-box">
+
+<h2>Welcome Back</h2>
+<div class="tagline">Train smarter. Track better.</div>
+
+<div class="toggle">
+  <button id="emailTab" class="active">Email</button>
+  <button id="phoneTab">Phone</button>
+</div>
+
+<!-- EMAIL TAB -->
+<div id="emailLogin">
+  <div class="input-box">
+    <input type="text" id="email" placeholder="Email">
+  </div>
+
+  <div class="input-box">
+    <input type="password" id="password" placeholder="Password">
+  </div>
+
+  <div class="input-box">
+    <select id="roleSelect">
+      <option value="user">User Login</option>
+      <option value="admin">Admin Login</option>
+    </select>
+  </div>
+</div>
+
+<!-- PHONE TAB -->
+<div id="phoneLogin" class="hidden">
+  <div class="input-box input-row">
+    <input type="text" id="phone" placeholder="Phone Number">
+    <button class="otp-send-btn" id="sendPhoneOtpBtn">Send OTP</button>
+  </div>
+
+  <div class="input-box">
+    <input type="text" id="otp" placeholder="Enter 6-digit OTP">
+  </div>
+
+  <div class="input-box">
+    <select id="phoneRoleSelect">
+      <option value="user">User Login</option>
+      <option value="admin">Admin Login</option>
+    </select>
+  </div>
+</div>
+
+<button class="login-btn" id="loginBtn">Login</button>
+
+<div class="signup-link">
+  New User? <a href="signup.html">Create Account</a>
+</div>
+
+<div class="forgot-password">
+  <a href="#" id="forgotBtn">Forgot Password?</a>
+</div>
+
+</div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div id="forgotModal" class="modal-overlay hidden" style="display: none;">
+  <div class="modal-content">
+    <span class="close-modal" id="closeForgotModal">&times;</span>
+    <h3 style="margin-bottom:15px; color:#00eaff;">Reset Password</h3>
+
+    <div class="input-box input-row">
+      <input type="email" id="resetEmail" placeholder="Registered Email">
+      <button class="otp-send-btn" id="sendResetOtpBtn">Send OTP</button>
+    </div>
+
+    <div class="input-box">
+      <input type="text" id="resetOtp" placeholder="Enter OTP">
+    </div>
+
+    <div class="input-box">
+      <input type="password" id="newPassword" placeholder="New Password">
+    </div>
+
+    <button class="modal-btn" id="submitResetBtn">Reset Password</button>
+  </div>
+</div>
+
+<script>
+const API = "http://localhost:2000";
+
+/* TOGGLE TABS */
+const emailTab = document.getElementById("emailTab");
+const phoneTab = document.getElementById("phoneTab");
+const emailLogin = document.getElementById("emailLogin");
+const phoneLogin = document.getElementById("phoneLogin");
+
+emailTab.onclick = () => {
+  emailTab.classList.add("active");
+  phoneTab.classList.remove("active");
+  emailLogin.classList.remove("hidden");
+  phoneLogin.classList.add("hidden");
+};
+
+phoneTab.onclick = () => {
+  phoneTab.classList.add("active");
+  emailTab.classList.remove("active");
+  phoneLogin.classList.remove("hidden");
+  emailLogin.classList.add("hidden");
+};
+
+/* TOAST NOTIFICATION */
+function showToast(message, type = "success") {
+  const toast = document.getElementById("toast");
+  const toastMsg = document.getElementById("toastMsg");
+  const toastIcon = document.getElementById("toastIcon");
+
+  toastMsg.innerText = message;
+  toast.className = `toast ${type} show`;
+  toastIcon.innerText = type === "success" ? "🚀" : "⚠️";
+
+  setTimeout(() => { toast.classList.remove("show"); }, 4000);
+}
+
+/* 3D TILT EFFECT */
+const btn = document.getElementById("loginBtn");
+btn.addEventListener("mousemove", (e) => {
+  const rect = btn.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+  btn.style.transform = `perspective(300px) rotateX(${-y / 4}deg) rotateY(${x / 4}deg) translateY(-2px)`;
+});
+btn.addEventListener("mouseleave", () => {
+  btn.style.transform = "perspective(300px) rotateX(0deg) rotateY(0deg) translateY(0px)";
+});
+
+/* SEND OTP FOR PHONE LOGIN */
+document.getElementById("sendPhoneOtpBtn").onclick = async () => {
+  const phone = document.getElementById("phone").value.trim();
+  if (!phone) return showToast("Please enter a phone number", "error");
+
+  try {
+    const res = await fetch(`${API}/api/send-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: phone })
+    });
+    const data = await res.json();
+    showToast(data.message, data.success ? "success" : "error");
+  } catch (err) {
+    showToast("Error sending OTP", "error");
+  }
+};
+
+/* LOGIN ACTION */
+btn.onclick = async () => {
+  const usingPhone = !phoneLogin.classList.contains("hidden");
+
+  if (usingPhone) {
+    const phone = document.getElementById("phone").value;
+    const otp = document.getElementById("otp").value;
+    const role = document.getElementById("phoneRoleSelect").value;
+
+    try {
+      const response = await fetch(`${API}/api/login-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, otp, role })
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("username", data.name || "User");
+        localStorage.setItem("role", data.role);
+        showToast(data.message, "success");
+
+        setTimeout(() => {
+          window.location.href = data.role === "admin" ? "admin.html" : "dashboard1.html";
+        }, 1200);
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (err) {
+      showToast("Server Connection Error", "error");
+    }
+
+  } else {
+    // EMAIL & PASSWORD LOGIN
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const role = document.getElementById("roleSelect").value;
+
+    try {
+      const response = await fetch(`${API}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role })
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("username", data.name || "User");
+        localStorage.setItem("role", data.role);
+        showToast("Login Successful!", "success");
+
+        setTimeout(() => {
+          window.location.href = data.role === "admin" ? "admin.html" : "dashboard1.html";
+        }, 1200);
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (err) {
+      showToast("Server Connection Error", "error");
+    }
+  }
+};
+
+/* FORGOT PASSWORD MODAL CONTROLS */
+const forgotModal = document.getElementById("forgotModal");
+
+document.getElementById("forgotBtn").onclick = (e) => {
+  e.preventDefault();
+  forgotModal.style.display = "flex";
+  forgotModal.classList.remove("hidden");
+};
+
+document.getElementById("closeForgotModal").onclick = () => {
+  forgotModal.style.display = "none";
+  forgotModal.classList.add("hidden");
+};
+
+/* SEND RESET OTP */
+document.getElementById("sendResetOtpBtn").onclick = async () => {
+  const email = document.getElementById("resetEmail").value.trim();
+  if (!email) return showToast("Enter your registered email", "error");
+
+  try {
+    const res = await fetch(`${API}/api/send-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: email })
+    });
+    const data = await res.json();
+    showToast(data.message, data.success ? "success" : "error");
+  } catch (err) {
+    showToast("Error sending OTP", "error");
+  }
+};
+
+/* SUBMIT PASSWORD RESET */
+document.getElementById("submitResetBtn").onclick = async () => {
+  const email = document.getElementById("resetEmail").value.trim();
+  const otp = document.getElementById("resetOtp").value.trim();
+  const newPassword = document.getElementById("newPassword").value;
+
+  if (!email || !otp || !newPassword) {
+    return showToast("Please fill all fields", "error");
+  }
+
+  try {
+    const res = await fetch(`${API}/api/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp, newPassword })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showToast(data.message, "success");
+      forgotModal.style.display = "none";
+      forgotModal.classList.add("hidden");
+    } else {
+      showToast(data.message, "error");
+    }
+  } catch (err) {
+    showToast("Server Connection Error", "error");
+  }
+};
+</script>
+
+</body>
+</html>

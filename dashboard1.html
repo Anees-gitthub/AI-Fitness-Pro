@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Fitness Pro</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+  height:100vh;
+  background: radial-gradient(circle at top,#1a1a1a,#000);
+  color:white;
+  opacity:0;
+  transition:0.5s;
+  overflow-x:hidden;
+}
+
+/* NAV */
+.nav{display:flex;justify-content:space-between;padding:20px 40px;align-items:center;}
+.logo{font-size:22px;font-weight:bold;background:linear-gradient(45deg,#ff4d4d,#ff9900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* PROFILE */
+.profile{display:flex;align-items:center;gap:10px;cursor:pointer;position:relative;}
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#ff4d4d,#ff9900);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:18px;
+    box-shadow:0 0 12px rgba(255,77,77,.5);
+}
+
+/* MENU */
+.menu{
+  position:absolute;right:0;top:45px;
+  background:rgba(20,20,20,0.9);
+  border-radius:12px;
+  opacity:0;
+  transform:translateY(-10px);
+  pointer-events:none;
+  transition:0.3s;
+}
+.menu.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+.menu p{padding:10px;cursor:pointer;}
+.menu p:hover{background:#222;}
+
+/* MAIN */
+.main{padding:40px;}
+
+/* HERO */
+.hero h1{
+  font-size:48px;
+  background:linear-gradient(90deg,#fff,#ff4d4d,#ff9900);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero p{color:#aaa;margin-top:10px;}
+
+/* ACTIONS */
+.actions{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-top:40px;
+}
+
+.action{
+  height:150px;
+  border-radius:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  backdrop-filter:blur(10px);
+  transition:.3s;
+}
+.action span{font-size:28px;margin-bottom:10px;}
+
+.workout{background:linear-gradient(135deg,#ff4d4d,#ff0000);}
+.diet{background:linear-gradient(135deg,#00c6ff,#0072ff);}
+.ai{background:linear-gradient(135deg,#7f00ff,#e100ff);}
+
+.action:hover{transform:translateY(-8px);}
+
+/* FORMS SECTION */
+.form-section {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.form-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.form-card h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  background: linear-gradient(90deg, #00eaff, #0077ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  background: #1b1b1b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: white;
+  outline: none;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #00eaff, #0077ff);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .3s;
+  margin-top: 10px;
+}
+
+.form-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.4);
+}
+
+.feedback-btn {
+  background: linear-gradient(45deg, #ff4d4d, #ff9900);
+}
+
+.feedback-btn:hover {
+  box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+}
+
+/* BLOG */
+.blog-section{margin-top:60px;}
+
+.blog-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+
+.blog-card{
+  background:rgba(255,255,255,0.05);
+  border-radius:15px;
+  overflow:hidden;
+  backdrop-filter:blur(10px);
+  transition:.3s;
+}
+
+.blog-card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.blog-card h3{padding:10px;}
+.meta{padding:0 10px;color:#aaa;font-size:12px;}
+
+.blog-card button{
+  margin:10px;
+  padding:8px 12px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(45deg,#ff4d4d,#ff9900);
+  color:white;
+  cursor:pointer;
+}
+
+.blog-card:hover{transform:translateY(-5px);}
+
+/* MODAL & CUSTOM ALERT STYLES */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modal-content{
+    background:#111;
+    padding:30px;
+    border-radius:25px;
+    width:90%;
+    max-width:550px;
+    box-shadow:0 0 40px rgba(255,77,77,.35);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+/* PREMIUM CUSTOM NOTIFICATION MODAL */
+.custom-alert-box {
+  background: #111;
+  border-radius: 24px;
+  padding: 35px 30px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 0 50px rgba(0, 234, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.alert-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.alert-icon.cyan {
+  background: rgba(0, 234, 255, 0.15);
+  color: #00eaff;
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.4);
+}
+
+.alert-icon.orange {
+  background: rgba(255, 122, 0, 0.15);
+  color: #ff9900;
+  box-shadow: 0 0 20px rgba(255, 153, 0, 0.4);
+}
+
+.alert-icon.red {
+  background: rgba(255, 77, 77, 0.15);
+  color: #ff4d4d;
+  box-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
+}
+
+.custom-alert-box h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.custom-alert-box p {
+  color: #aaa;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.custom-alert-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+@keyframes popUp {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.profile-card{ text-align:center; }
+
+.profile-header{
+    padding:20px;
+    background:linear-gradient(135deg,#ff4d4d,#ff9900);
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+.profile-avatar{
+    width:90px;
+    height:90px;
+    margin:auto;
+    border-radius:50%;
+    background:white;
+    color:#ff4d4d;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:38px;
+    margin-bottom:15px;
+}
+
+.profile-header h2{ color:white; margin-bottom:8px; }
+
+.role{
+    background:rgba(255,255,255,.25);
+    padding:6px 18px;
+    border-radius:20px;
+    color:white;
+    font-size:13px;
+}
+
+.profile-info{ display:grid; gap:15px; }
+
+.info-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    background:#1b1b1b;
+    padding:16px;
+    border-radius:15px;
+    transition:.3s;
+}
+
+.info-box:hover{
+    transform:translateX(6px);
+    background:#242424;
+}
+
+.info-box i{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#ff4d4d,#ff9900);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    color:white;
+}
+
+.info-box small{ color:#888; }
+.info-box p{ margin-top:3px; color:white; font-weight:600; }
+
+.close{
+  float:right;
+  cursor:pointer;
+  font-size:18px;
+}
+
+/* GLOW */
+.glow{
+  position:absolute;
+  width:400px;height:400px;
+  background:radial-gradient(circle,#ff4d4d,transparent);
+  filter:blur(140px);
+  animation:moveGlow 10s infinite alternate;
+}
+
+@keyframes moveGlow{
+  0%{transform:translate(0,0);}
+  100%{transform:translate(200px,100px);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<div class="nav">
+  <div class="logo">🔥 AI Fitness Pro</div>
+
+  <div class="profile" onclick="toggleMenu()">
+    <div class="avatar">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <span id="username">User</span>
+
+    <div id="menu" class="menu">
+      <p onclick="viewProfile()">View Profile</p>
+      <p onclick="logout()">Logout</p>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="hero">
+    <h1>Train Smarter ⚡</h1>
+    <p>Your AI-powered fitness system</p>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <div class="action workout" onclick="navigate('bmi.html')"><span>⚖</span>BMI</div>
+    <div class="action diet" onclick="navigate('calories.html')"><span>🔥</span>Calories</div>
+    <div class="action diet" onclick="navigate('timer.html')"><span>⏱</span>Timer</div>
+    <div class="action ai" onclick="navigate('diet4.html')"><span>🥗</span>Diet Plan</div>
+    <div class="action ai" onclick="navigate('indexAI.html')"><span>🤖</span>AI Coach</div>
+  </div>
+
+  <!-- FORMS SECTION -->
+  <div class="form-section">
+    <!-- MEDICAL FITNESS FORM -->
+    <div class="form-card">
+      <h2>📋 Medical Fitness Form</h2>
+      <form id="medicalForm" onsubmit="submitMedicalForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Age</label>
+            <input type="number" id="medAge" placeholder="25" required>
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="medGender" required>
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Height (cm)</label>
+            <input type="number" id="medHeight" placeholder="175" required>
+          </div>
+          <div class="form-group">
+            <label>Weight (kg)</label>
+            <input type="number" id="medWeight" placeholder="70" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Blood Group</label>
+          <input type="text" id="medBlood" placeholder="O+">
+        </div>
+
+        <div class="form-group">
+          <label>Medical Conditions / Allergies</label>
+          <textarea id="medConditions" rows="2" placeholder="e.g. Asthma, Peanut Allergy, None"></textarea>
+        </div>
+
+        <button type="submit" class="form-btn">Save Medical Profile</button>
+      </form>
+    </div>
+
+    <!-- FEEDBACK FORM -->
+    <div class="form-card">
+      <h2 style="background: linear-gradient(90deg, #ff4d4d, #ff9900); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        💬 App Feedback
+      </h2>
+      <form id="feedbackForm" onsubmit="submitFeedback(event)">
+        <div class="form-group">
+          <label>Rating</label>
+          <select id="fbRating" required>
+            <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+            <option value="4">⭐⭐⭐⭐ (4/5)</option>
+            <option value="3">⭐⭐⭐ (3/5)</option>
+            <option value="2">⭐⭐ (2/5)</option>
+            <option value="1">⭐ (1/5)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Your Feedback / Suggestions</label>
+          <textarea id="fbMessage" rows="5" placeholder="Let us know how we can improve..." required></textarea>
+        </div>
+
+        <button type="submit" class="form-btn feedback-btn">Submit Feedback</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- BLOG -->
+  <div class="blog-section">
+    <h2>📚 Fitness Blog</h2>
+
+    <div class="blog-grid">
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74">
+        <h3>Why Most People Quit the Gym After 6 Weeks</h3>
+        <p class="meta">May 1 • Alyssa</p>
+        <button onclick="openBlogPage(0)">Read More</button>
+      </div>
+
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e">
+        <h3>Protein for Lifters</h3>
+        <p class="meta">Apr 28 • Alyssa</p>
+        <button onclick="openBlogPage(1)">Read More</button>
+      </div>
+
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61">
+        <h3>Beginner Strength Blueprint</h3>
+        <button onclick="openBlogPage(2)">Read More</button>
+      </div>
+
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438">
+        <h3>Strength vs Endurance</h3>
+        <button onclick="openBlogPage(3)">Read More</button>
+      </div>
+
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b">
+        <h3>Mind Muscle Connection</h3>
+        <button onclick="openBlogPage(4)">Read More</button>
+      </div>
+
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2">
+        <h3>Body Confidence</h3>
+        <button onclick="openBlogPage(5)">Read More</button>
+      </div>
+
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80">
+        <h3>Cardio vs Muscle</h3>
+        <button onclick="openBlogPage(6)">Read More</button>
+      </div>
+
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1">
+        <h3>Machines vs Free Weights</h3>
+        <button onclick="openBlogPage(7)">Read More</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODALS -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeBlog()">✖</span>
+    <h2 id="blogTitle"></h2>
+    <p id="blogContent"></p>
+  </div>
+</div>
+
+<div id="profileModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeProfile()">✖</span>
+    <h2 style="margin-bottom:15px;color:#00eaff;">👤 Your Profile</h2>
+    <div id="profileData" style="line-height:1.8;color:#ddd;"></div>
+  </div>
+</div>
+
+<!-- PREMIUM CUSTOM NOTIFICATION MODAL -->
+<div id="customAlertModal" class="modal">
+  <div class="custom-alert-box">
+    <div id="alertIcon" class="alert-icon cyan">
+      <i id="alertIconClass" class="fa-solid fa-check"></i>
+    </div>
+    <h3 id="alertTitle">Success</h3>
+    <p id="alertMessage">Your action was completed.</p>
+    <button id="alertBtn" class="custom-alert-btn" onclick="closeCustomAlert()">Continue</button>
+  </div>
+</div>
+
+<script>
+const API = "http://localhost:2000";
+
+window.onload = () => document.body.style.opacity = 1;
+
+document.getElementById("username").innerText = localStorage.getItem("username") || "User";
+
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("active");
+}
+
+document.addEventListener("click", e => {
+  if(!e.target.closest(".profile"))
+    document.getElementById("menu").classList.remove("active");
+});
+
+function navigate(p){
+  document.body.style.opacity = 0;
+  setTimeout(() => location.href = p, 400);
+}
+
+function logout(){
+  localStorage.clear();
+  navigate("login.html");
+}
+
+/* ================= PREMIUM CUSTOM POPUP SYSTEM ================= */
+function showCustomAlert(title, message, type = "cyan") {
+  const modal = document.getElementById("customAlertModal");
+  const iconBox = document.getElementById("alertIcon");
+  const iconClass = document.getElementById("alertIconClass");
+  const alertTitle = document.getElementById("alertTitle");
+  const alertMessage = document.getElementById("alertMessage");
+  const alertBtn = document.getElementById("alertBtn");
+
+  alertTitle.innerText = title;
+  alertMessage.innerText = message;
+
+  iconBox.className = `alert-icon ${type}`;
+  
+  if (type === "cyan") {
+    iconClass.className = "fa-solid fa-notes-medical";
+    alertBtn.style.background = "linear-gradient(45deg, #00eaff, #0077ff)";
+  } else if (type === "orange") {
+    iconClass.className = "fa-solid fa-heart";
+    alertBtn.style.background = "linear-gradient(45deg, #ff4d4d, #ff9900)";
+  } else {
+    iconClass.className = "fa-solid fa-circle-exclamation";
+    alertBtn.style.background = "linear-gradient(45deg, #ff4d4d, #aa0000)";
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeCustomAlert() {
+  document.getElementById("customAlertModal").style.display = "none";
+}
+
+function viewProfile() {
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    showCustomAlert("Authentication Error", "User session not found. Please log in.", "red");
+    return;
+  }
+
+  fetch(`${API}/api/user/profile/${userId}`)
+    .then(res => res.json())
+    .then(data => {
+      const profileData = document.getElementById("profileData");
+      profileData.innerHTML = `
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h2>${data.name || 'User'}</h2>
+                <span class="role">${(data.role || 'user').toUpperCase()}</span>
+            </div>
+            <div class="profile-info">
+                <div class="info-box">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div>
+                        <small>Email</small>
+                        <p>${data.email || 'N/A'}</p>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fa-solid fa-phone"></i>
+                    <div>
+                        <small>Phone</small>
+                        <p>${data.phone || 'N/A'}</p>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <div>
+                        <small>Membership</small>
+                        <p>Active</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+      `;
+      document.getElementById("profileModal").style.display = "flex";
+    })
+    .catch(err => showCustomAlert("Error", "Error fetching profile details.", "red"));
+}
+
+/* ================= SAVE MEDICAL PROFILE TO DB ================= */
+async function submitMedicalForm(e) {
+  e.preventDefault();
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    showCustomAlert("Login Required", "Please log in first to update your medical details.", "red");
+    return;
+  }
+
+  const formData = {
+    userId,
+    age: document.getElementById("medAge").value,
+    gender: document.getElementById("medGender").value,
+    height: document.getElementById("medHeight").value,
+    weight: document.getElementById("medWeight").value,
+    bloodGroup: document.getElementById("medBlood").value,
+    medicalConditions: [document.getElementById("medConditions").value]
+  };
+
+  try {
+    const res = await fetch(`${API}/api/medical/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showCustomAlert("Medical Profile Updated", "Thank you! Your health parameters have been updated successfully.", "cyan");
+    } else {
+      showCustomAlert("Save Error", "Failed to save medical details.", "red");
+    }
+  } catch (err) {
+    console.error(err);
+    showCustomAlert("Server Error", "Could not connect to server.", "red");
+  }
+}
+
+/* ================= SAVE FEEDBACK TO DB ================= */
+async function submitFeedback(e) {
+  e.preventDefault();
+  const userId = localStorage.getItem("userId");
+
+  const formData = {
+    userId,
+    rating: document.getElementById("fbRating").value,
+    message: document.getElementById("fbMessage").value
+  };
+
+  try {
+    const res = await fetch(`${API}/api/feedback/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showCustomAlert("Thank You! Premium", "Thank you for your valuable feedback! We appreciate your support.", "orange");
+      document.getElementById("feedbackForm").reset();
+    } else {
+      showCustomAlert("Submission Failed", "Failed to submit feedback.", "red");
+    }
+  } catch (err) {
+    console.error(err);
+    showCustomAlert("Server Error", "Could not submit feedback to server.", "red");
+  }
+}
+
+/* BLOG DATA */
+const blogs=[
+  { title:"Why Most People Quit the Gym After 6 Weeks", content:"..." },
+  { title:"Protein for Lifters", content:"..." },
+  { title:"Beginner Strength Blueprint", content:"..." },
+  { title:"Strength vs Endurance", content:"..." },
+  { title:"Mind Muscle Connection", content:"..." },
+  { title:"Body Confidence", content:"..." },
+  { title:"Cardio vs Muscle", content:"..." },
+  { title:"Machines vs Free Weights", content:"..." }
+];
+
+function openBlogPage(index){
+  localStorage.setItem("selectedBlog", index);
+  navigate("blog.html");
+}
+
+function closeBlog(){
+  document.getElementById("modal").style.display="none";
+}
+
+function closeProfile(){
+  document.getElementById("profileModal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

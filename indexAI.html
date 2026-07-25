@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Fitness Pro - Cyber AI Coach</title>
+
+  <style>
+    /* =========================================================
+       PREMIUM GLASSMORPHISM & 2-SIDE COLOR SCHEME
+       ========================================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    html, body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden; /* STOPS ALL SWIPING / PAGE SCROLLING */
+      background: #0a0e17;
+      color: #fff;
+    }
+
+    /* VIDEO BACKGROUND */
+    #bgVideo {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -2;
+      object-fit: cover;
+      filter: brightness(0.5) contrast(1.1);
+    }
+
+    /* DARK GRADIENT OVERLAY */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(10, 14, 23, 0.5) 0%, rgba(5, 7, 12, 0.9) 100%);
+      z-index: -1;
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      height: 100vh;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* HEADER BAR */
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(45deg, #00eaff, #0077ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 2px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(0, 234, 255, 0.3);
+      color: #00eaff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #00eaff;
+      color: #000;
+      box-shadow: 0 0 15px rgba(0, 234, 255, 0.5);
+    }
+
+    /* CHAT CONTAINER - GLASS CARD */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 234, 255, 0.2);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      padding: 14px 20px;
+      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00ff88;
+    }
+
+    /* CHAT BOX */
+    .chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-box::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-box::-webkit-scrollbar-thumb {
+      background: rgba(0, 234, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    /* WELCOME CARD */
+    .welcome-msg {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .welcome-msg h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: #00eaff;
+    }
+
+    .welcome-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .suggestions span {
+      background: rgba(0, 234, 255, 0.08);
+      border: 1px solid rgba(0, 234, 255, 0.25);
+      color: #e0f7fc;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .suggestions span:hover {
+      background: rgba(0, 234, 255, 0.25);
+      border-color: #00eaff;
+    }
+
+    /* =========================================================
+       DISTINCT 2-SIDE CHAT BUBBLES & COLORS
+       ========================================================= */
+    .msg-row {
+      display: flex;
+      width: 100%;
+      margin-bottom: 4px;
+    }
+
+    /* USER (QUESTIONS) -> RIGHT ALIGNED */
+    .user-row {
+      justify-content: flex-end;
+    }
+
+    /* AI (ANSWERS) -> LEFT ALIGNED */
+    .bot-row {
+      justify-content: flex-start;
+    }
+
+    .msg-bubble {
+      max-width: 80%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: break-word;
+      white-space: pre-wrap; /* RESPECTS SPACES & NEWLINES */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* USER QUESTION STYLE (CYAN / BLUE GRADIENT - RIGHT SIDE) */
+    .user-bubble {
+      background: linear-gradient(135deg, #0077ff, #00eaff);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+      font-weight: 500;
+    }
+
+    /* AI ANSWER STYLE (DARK SLATE / GREEN ACCENT - LEFT SIDE) */
+    .bot-bubble {
+      background: #1e293b;
+      border: 1px solid rgba(0, 234, 255, 0.3);
+      color: #e2e8f0;
+      border-bottom-left-radius: 4px;
+    }
+
+    .bot-bubble strong {
+      color: #00eaff;
+    }
+
+    /* INPUT AREA */
+    .inputArea {
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .inputArea input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 14px 20px;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .inputArea input:focus {
+      border-color: #00eaff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .send-btn {
+      background: linear-gradient(45deg, #00eaff, #0077ff);
+      border: none;
+      color: #fff;
+      padding: 14px 26px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <video autoplay muted loop id="bgVideo">
+    <source src="C:\Users\yasir\Downloads\257554_medium.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay"></div>
+
+  <div class="container">
+
+    <header class="header-bar">
+      <div>
+        <div class="logo">🔥 AI FITNESS PRO</div>
+        <p class="tagline">Your Personal AI Fitness Coach</p>
+      </div>
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </header>
+
+    <div class="chat-container">
+
+      <div class="top-bar">
+        <div class="status-dot"></div>
+        <span>AI Trainer Online</span>
+      </div>
+
+      <div id="chatBox" class="chat-box">
+
+        <div class="welcome-msg" id="welcomeMsg">
+          <h2>👋 Welcome to AI Fitness Pro</h2>
+          <p class="welcome-text">
+            Your smart AI fitness coach is ready to help you train smarter, eat better, and stay consistent.
+          </p>
+
+          <div class="suggestions">
+            <span onclick="sendSuggestion('Give me an intense 5-day workout plan')">💪 Workout Plans</span>
+            <span onclick="sendSuggestion('What are the best tips for fast fat loss?')">🔥 Fat Loss</span>
+            <span onclick="sendSuggestion('High-protein diet tips for muscle building')">🥗 Diet Tips</span>
+            <span onclick="sendSuggestion('How can I optimize muscle hypertrophy?')">⚡ Muscle Gain</span>
+            <span onclick="sendSuggestion('Quick 20-minute home workout with no equipment')">🏠 Home Workouts</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="inputArea">
+        <input 
+          type="text" 
+          id="userInput" 
+          placeholder="Ask your AI trainer..." 
+          autocomplete="off"
+        >
+        <button class="send-btn" onclick="sendMessage()">
+          Send ⚡
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function goBack() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = 'dashboard1.html';
+      }
+    }
+
+    /* ENTER KEY TRIGGER */
+    document.getElementById("userInput").addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    function sendSuggestion(text) {
+      document.getElementById("userInput").value = text;
+      sendMessage();
+    }
+
+    /* TEXT SPACE FIXER FUNCTION */
+    function sanitizeSpacing(text) {
+      if (!text) return "";
+      
+      // Auto-inserts missing spaces after punctuation if API returns squeezed words (e.g. "today!I'm" -> "today! I'm")
+      let fixedText = text.replace(/([.!?])([A-Za-z])/g, '$1 $2');
+      fixedText = fixedText.replace(/([a-z])([A-Z])/g, '$1 $2');
+      
+      return fixedText;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      // 1. ADD USER QUESTION (RIGHT SIDE - CYAN)
+      appendMessage(text, "user");
+      input.value = "";
+
+      const typingId = appendTypingIndicator();
+
+      try {
+        let reply = "";
+        
+        // Calls Grok API script if attached, otherwise fall back to demo response
+        if (typeof fetchAIResponse === "function") {
+          reply = await fetchAIResponse(text);
+        } else if (typeof generateAI === "function") {
+          reply = await generateAI(text);
+        } else {
+          reply = await mockAiResponse(text);
+        }
+
+        removeMessage(typingId);
+        
+        // 2. ADD AI RESPONSE (LEFT SIDE - DARK SLATE/GREEN)
+        appendMessage(reply, "bot");
+
+      } catch (error) {
+        removeMessage(typingId);
+        appendMessage("⚠️ Connection error. Please check your Grok API backend.", "bot");
+      }
+    }
+
+    function appendMessage(msg, sender) {
+      const chatBox = document.getElementById("chatBox");
+
+      const row = document.createElement("div");
+      row.className = `msg-row ${sender}-row`;
+
+      const bubble = document.createElement("div");
+      bubble.className = `msg-bubble ${sender}-bubble`;
+      
+      // Apply space sanitizer
+      const cleanMsg = sanitizeSpacing(msg);
+      
+      bubble.innerText = cleanMsg;
+
+      row.appendChild(bubble);
+      chatBox.appendChild(row);
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function appendTypingIndicator() {
+      const chatBox = document.getElementById("chatBox");
+      const id = "typing-" + Date.now();
+
+      const row = document.createElement("div");
+      row.className = "msg-row bot-row";
+      row.id = id;
+
+      const bubble = document.createElement("div");
+      bubble.className = "msg-bubble bot-bubble";
+      bubble.innerText = "⚡ AI Coach is typing...";
+
+      row.appendChild(bubble);
+      chatBox.appendChild(row);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      return id;
+    }
+
+    function removeMessage(id) {
+      const elem = document.getElementById(id);
+      if (elem) elem.remove();
+    }
+
+    function mockAiResponse(prompt) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve("Hello! Welcome to our fitness session today! I'm excited to help you achieve your goals. What specific target are you focusing on?");
+        }, 800);
+      });
+    }
+  </script>
+
+  <script src="scriptAI.js"></script>
+
+</body>
+</html>
